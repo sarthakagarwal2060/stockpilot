@@ -58,6 +58,28 @@ module "eks" {
   cluster_endpoint_public_access           = true
   enable_cluster_creator_admin_permissions = true
 
+  node_security_group_additional_rules = {
+    # The module only opens node-to-node ports 1025-65535. kube-proxy forwards load balancer
+    # traffic to ingress-nginx pods on *other* nodes on port 80, so allow all traffic between nodes.
+    ingress_self_all = {
+      description = "Node to node, all ports"
+      type        = "ingress"
+      protocol    = "-1"
+      from_port   = 0
+      to_port     = 0
+      self        = true
+    }
+    # The EKS metrics-server add-on serves on 10251; the API server must reach it for `kubectl top` and the HPA.
+    ingress_cluster_metrics_server = {
+      description                   = "Cluster API to metrics-server"
+      type                          = "ingress"
+      protocol                      = "tcp"
+      from_port                     = 10251
+      to_port                       = 10251
+      source_cluster_security_group = true
+    }
+  }
+
   # Pods get AWS permissions through EKS Pod Identity (see aws_iam_role.ebs_csi), so the
   # IRSA OIDC provider isn't needed - and AWS Free-plan accounts are not allowed to create one.
   enable_irsa = false
