@@ -58,6 +58,10 @@ module "eks" {
   cluster_endpoint_public_access           = true
   enable_cluster_creator_admin_permissions = true
 
+  # Pods get AWS permissions through EKS Pod Identity (see aws_iam_role.ebs_csi), so the
+  # IRSA OIDC provider isn't needed - and AWS Free-plan accounts are not allowed to create one.
+  enable_irsa = false
+
   cluster_addons = {
     coredns                = {}
     kube-proxy             = {}
