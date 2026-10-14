@@ -47,7 +47,7 @@ k8s/                namespace, gp3 StorageClass, ingress-nginx values
 helm/stockpilot/    Helm chart (values.yaml, values-dev.yaml, values-prod.yaml)
 monitoring/         kube-prometheus-stack values
 troubleshooting/    5 deliberately broken manifests + guide
-scripts/            load-test.sh (HPA demo), seed-activity.sh
+scripts/            load-test.sh (HPA demo)
 ```
 
 ## API
@@ -136,8 +136,6 @@ Trivy unpacks each built image and checks two things against public CVE database
 The pipeline only fails on **HIGH or CRITICAL** CVEs that have a fix available (`ignore-unfixed: true`). A green scan means no known, fixable, serious vulnerability was found when the image was built. It does not prove the image is secure. Trivy is one layer, alongside dependency pinning, non-root containers, secret hygiene and runtime controls.
 
 ## 4. AWS infrastructure (Terraform)
-
-> **Doing this on a new AWS account's free credits?** Follow [`docs/aws-free-run.md`](docs/aws-free-run.md). `scripts/aws-session.sh` wraps the whole session (up → screenshots → down → leftover check).
 
 Requirements: the AWS CLI configured (`aws configure` or SSO), Terraform 1.7 or later, kubectl and Helm.
 
@@ -247,7 +245,7 @@ In Grafana, open **Dashboards → StockPilot - Service Overview**. Its panels sh
 - backend CPU per pod (what the HPA sees)
 - business metrics: stock adjustments by reason and units moved in and out
 
-Run `./scripts/seed-activity.sh` to populate the business panels.
+Adjust some stock in the UI to populate the business panels.
 
 ## 8. Tear down (avoid AWS charges)
 
@@ -262,30 +260,3 @@ cd terraform && terraform destroy
 ## 9. Troubleshooting lab
 
 [`troubleshooting/`](troubleshooting/README.md) has five broken manifests: ImagePullBackOff, a Service with no endpoints, CrashLoopBackOff from a bad database URL, a readiness probe that fails, and a Pod stuck Pending on resources. Each comes with diagnosis steps and the fix.
-
-## 10. Live demo script
-
-1. Open the UI, create a product, adjust its stock, and watch the KPIs and movement feed update.
-2. In `/api/docs`, run CRUD calls against `/api/products`. Show the `products` table in `psql`.
-3. Make a visible change, e.g. change the `<h1>` in `frontend/src/App.jsx`, then `git commit` and `git push`.
-4. In GitHub Actions, show the run: tests, then build, then the Trivy output, then the push, then the deploy.
-5. In GHCR, show the new `:<sha>` tags.
-6. Run `kubectl get pods -n stockpilot -w` to watch the rolling update, then refresh the browser to see the change.
-7. Show `helm list` and `helm history`, then `kubectl get hpa` while `load-test.sh` is running.
-8. Show the Prometheus targets and the Grafana dashboard.
-9. Break something from `troubleshooting/`, then diagnose and fix it live.
-
-## Grading rubric map
-
-| Module | Where |
-|---|---|
-| M1 App | `backend/app/`, `backend/alembic/versions/`, `frontend/src/`, `docker-compose.yml` |
-| M2 Tests | `backend/tests/` (15 tests), `backend/pytest.ini`, `tests/conftest.py` (SQLite test DB) |
-| M3 Git | `.gitignore` covers `.env`, `__pycache__`, `node_modules`, `.venv`, tfstate |
-| M4 Docker | `backend/Dockerfile` (uid 10001), `frontend/Dockerfile` (multi-stage, uid 101) |
-| M5 CI/CD | `.github/workflows/ci-cd.yml` |
-| M6 Trivy | The `Trivy scan` step plus the write-up in section 3 |
-| M7 Terraform | `terraform/`, `terraform.tfvars.example` |
-| M8 K8s + Helm | `k8s/`, `helm/stockpilot/` |
-| M9 Observability | `/metrics`, `templates/servicemonitor.yaml`, `dashboards/stockpilot.json`, `monitoring/` |
-| M10 Docs | This README, plus the demo script above |
