@@ -4,6 +4,8 @@ The goal is to earn the M7 Terraform points (VPC + EKS provisioned, then destroy
 
 **What actually has to run on AWS:** only the infrastructure, meaning the VPC and an EKS cluster with worker nodes. An empty cluster is enough for M7. Deploying the frontend and backend onto EKS is **optional** (step 5). Helm, Ingress, HPA and Grafana can all be shown on a free local cluster instead.
 
+> **Free-plan limits:** only Free Tier–eligible instance types can launch (`t3.micro/small`, `c7i-flex.large`, `m7i-flex.large`, …), so worker nodes use `c7i-flex.large`.
+>
 > **Free-plan region lock:** Free-plan accounts can only use their **home region**, which is the region the console first opens in. Every other region returns `explicit deny in a service control policy`. This project defaults to `ap-southeast-2` (Sydney) for that reason. If your account's home region is different, set `aws_region` in `terraform/terraform.tfvars` and run `export AWS_REGION=<region>` before using the script. Spot instances are also blocked on the Free plan, so keep `node_capacity_type = "ON_DEMAND"`.
 
 ## Cost, in credits
@@ -11,7 +13,7 @@ The goal is to earn the M7 Terraform points (VPC + EKS provisioned, then destroy
 | Resource | Approx. price in ap-southeast-2 |
 |---|---|
 | EKS control plane | $0.10 / hour |
-| 2× t3.medium worker nodes | ~$0.11 / hour |
+| 2× c7i-flex.large worker nodes | ~$0.11 / hour |
 | NAT gateway | ~$0.06 / hour |
 | Network Load Balancer (only if you deploy, step 5) | ~$0.02 / hour |
 | **Total** | **~$0.30 / hour** |

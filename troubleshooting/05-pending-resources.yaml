@@ -13,4 +13,4 @@ spec:
         - name: web
           image: nginxinc/nginx-unprivileged:1.31-alpine
           resources:
-            requests: {cpu: "16", memory: 64Gi}   # larger than a t3.medium node
+            requests: {cpu: "16", memory: 64Gi}   # larger than any worker node

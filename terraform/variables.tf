@@ -31,7 +31,7 @@ variable "vpc_cidr" {
 variable "node_instance_types" {
   description = "Instance types for the managed node group"
   type        = list(string)
-  default     = ["t3.medium"]
+  default     = ["c7i-flex.large"] # Free Tier eligible (AWS Free-plan accounts can only launch these)
 }
 
 variable "node_capacity_type" {

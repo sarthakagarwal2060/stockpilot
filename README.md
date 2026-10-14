@@ -153,10 +153,10 @@ kubectl get nodes
 
 This creates:
 - a VPC in `ap-southeast-2` across 2 AZs, with 2 public subnets (for load balancers), 2 private subnets (for nodes) and 1 NAT gateway
-- an EKS cluster with a managed node group of 2× `t3.medium` (AL2023)
+- an EKS cluster with a managed node group of 2× `c7i-flex.large` (AL2023, Free Tier eligible)
 - the add-ons `vpc-cni`, `coredns`, `kube-proxy`, `eks-pod-identity-agent`, `aws-ebs-csi-driver` (IAM through Pod Identity, no static keys) and `metrics-server` (needed by the HPA)
 
-> **Cost:** EKS control plane plus 2× t3.medium, the NAT gateway and the NLB come to roughly **US$5-6 per day**. Run `terraform destroy` when you're done (section 8).
+> **Cost:** EKS control plane plus 2× c7i-flex.large, the NAT gateway and the NLB come to roughly **US$5-6 per day**. Run `terraform destroy` when you're done (section 8).
 
 No credentials are stored in this repo. `*.tfvars`, state files and `.terraform/` are git-ignored, and only `terraform.tfvars.example` is committed.
 
