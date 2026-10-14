@@ -152,7 +152,7 @@ export default function App() {
         <header className="topbar">
           <button className="menu" aria-label="Open menu" onClick={() => setSidebarOpen(true)}>☰</button>
           <div>
-            <h1>Inventory overview</h1>
+            <h1>Inventory overview · v2</h1>
             <p className="muted">Track stock levels, reorder points and every movement in one place.</p>
           </div>
           <button className="primary" onClick={() => setEditing({})}>+ New product</button>
