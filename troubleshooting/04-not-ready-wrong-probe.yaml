@@ -1,0 +1,18 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: not-ready
+  namespace: stockpilot
+spec:
+  replicas: 1
+  selector: {matchLabels: {lab: not-ready}}
+  template:
+    metadata: {labels: {lab: not-ready}}
+    spec:
+      containers:
+        - name: web
+          image: nginxinc/nginx-unprivileged:1.31-alpine
+          ports: [{containerPort: 8080}]
+          readinessProbe:
+            httpGet: {path: /readyz, port: 8080}   # nginx returns 404 here
+            periodSeconds: 5

@@ -1,0 +1,16 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: too-big
+  namespace: stockpilot
+spec:
+  replicas: 1
+  selector: {matchLabels: {lab: too-big}}
+  template:
+    metadata: {labels: {lab: too-big}}
+    spec:
+      containers:
+        - name: web
+          image: nginxinc/nginx-unprivileged:1.31-alpine
+          resources:
+            requests: {cpu: "16", memory: 64Gi}   # larger than a t3.medium node

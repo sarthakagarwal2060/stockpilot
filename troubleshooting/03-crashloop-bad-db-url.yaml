@@ -1,0 +1,17 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: crashloop-db
+  namespace: stockpilot
+spec:
+  replicas: 1
+  selector: {matchLabels: {lab: crashloop-db}}
+  template:
+    metadata: {labels: {lab: crashloop-db}}
+    spec:
+      containers:
+        - name: backend
+          image: ghcr.io/YOUR_GITHUB_USER/stockpilot-backend:latest   # use a real SHA tag
+          env:
+            - name: DATABASE_URL
+              value: postgresql+psycopg://stockpilot:wrong@postgres-wrong:5432/stockpilot
