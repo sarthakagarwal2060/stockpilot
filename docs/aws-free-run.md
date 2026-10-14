@@ -4,15 +4,17 @@ The goal is to earn the M7 Terraform points (VPC + EKS provisioned, then destroy
 
 **What actually has to run on AWS:** only the infrastructure, meaning the VPC and an EKS cluster with worker nodes. An empty cluster is enough for M7. Deploying the frontend and backend onto EKS is **optional** (step 5). Helm, Ingress, HPA and Grafana can all be shown on a free local cluster instead.
 
+> **Free-plan region lock:** Free-plan accounts can only use their **home region**, which is the region the console first opens in. Every other region returns `explicit deny in a service control policy`. This project defaults to `ap-southeast-2` (Sydney) for that reason. If your account's home region is different, set `aws_region` in `terraform/terraform.tfvars` and run `export AWS_REGION=<region>` before using the script. Spot instances are also blocked on the Free plan, so keep `node_capacity_type = "ON_DEMAND"`.
+
 ## Cost, in credits
 
-| Resource | Approx. price in ap-south-1 |
+| Resource | Approx. price in ap-southeast-2 |
 |---|---|
 | EKS control plane | $0.10 / hour |
-| 2× t3.medium worker nodes | ~$0.09 / hour |
+| 2× t3.medium worker nodes | ~$0.11 / hour |
 | NAT gateway | ~$0.06 / hour |
 | Network Load Balancer (only if you deploy, step 5) | ~$0.02 / hour |
-| **Total** | **~$0.25-0.30 / hour** |
+| **Total** | **~$0.30 / hour** |
 
 A full session takes about 1-2 hours, so it costs **under $1 out of the $100 sign-up credit**. On the **Free plan** AWS cannot charge your card at all. If the credits ever ran out, the account would be paused, not billed.
 
@@ -52,7 +54,7 @@ sudo snap install helm --classic
 Then configure your credentials:
 
 ```bash
-aws configure          # paste the two keys; region: ap-south-1; output: json
+aws configure          # paste the two keys; region: ap-southeast-2; output: json
 ```
 
 ## Step 3: Create the infrastructure (about 20 min)
@@ -69,7 +71,7 @@ Take these screenshots:
 |---|---|---|
 | After `plan` | The plan output ending in `Plan: NN to add, 0 to change, 0 to destroy` | M7 |
 | After `apply` | The `Apply complete!` line and the outputs | M7 |
-| AWS Console, region **Asia Pacific (Mumbai) ap-south-1** | *VPC → Your VPCs* (`stockpilot-dev-vpc`) and *Subnets* (2 public + 2 private) | M7 |
+| AWS Console, region **Asia Pacific (Sydney) ap-southeast-2** | *VPC → Your VPCs* (`stockpilot-dev-vpc`) and *Subnets* (2 public + 2 private) | M7 |
 | AWS Console | *EKS → Clusters → stockpilot-dev-eks*, plus the *Compute* tab showing the node group | M7 |
 
 **If `apply` fails with an access or "not allowed on free plan" error:** Free-plan accounts block some services. The VPC is usually already created by that point, so screenshot it anyway. Then run `./scripts/aws-session.sh down` and tell your instructor that EKS is blocked on the free plan; you can still show `plan` and the code. Don't upgrade to the Paid plan unless you're fine with possible card charges.
@@ -81,7 +83,7 @@ Take these screenshots:
 ```
 
 - Screenshot the `Destroy complete!` line (M7).
-- The script then checks the region for leftovers (EKS clusters, NAT gateways, load balancers, instances, EBS volumes, Elastic IPs). You want to see **`OK  Nothing billable left in ap-south-1.`**
+- The script then checks the region for leftovers (EKS clusters, NAT gateways, load balancers, instances, EBS volumes, Elastic IPs). You want to see **`OK  Nothing billable left in ap-southeast-2.`**
 - You can re-check at any time with `./scripts/aws-session.sh leftovers`.
 
 ---

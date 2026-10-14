@@ -12,7 +12,7 @@ terraform {
   # backend "s3" {
   #   bucket       = "stockpilot-tfstate-<unique-suffix>"
   #   key          = "eks/terraform.tfstate"
-  #   region       = "ap-south-1"
+  #   region       = "ap-southeast-2"
   #   use_lockfile = true
   # }
 }

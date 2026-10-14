@@ -13,7 +13,7 @@ set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 TF_DIR="$ROOT/terraform"
-REGION="${AWS_REGION:-ap-south-1}"
+REGION="${AWS_REGION:-ap-southeast-2}"
 NS=stockpilot
 export AWS_REGION="$REGION" AWS_DEFAULT_REGION="$REGION"
 
@@ -55,7 +55,7 @@ up() {
   aws eks describe-cluster --name "$(cluster_name)" --query 'cluster.{name:name,version:version,status:status}' --output table
   aws eks list-nodegroups --cluster-name "$(cluster_name)" --output table
   command -v kubectl >/dev/null 2>&1 && kubectl get nodes -o wide
-  warn "Screenshot now: AWS Console -> VPC (Your VPCs, Subnets) and EKS -> Clusters (region ap-south-1)."
+  warn "Screenshot now: AWS Console -> VPC (Your VPCs, Subnets) and EKS -> Clusters (region ap-southeast-2)."
 }
 
 deploy() {

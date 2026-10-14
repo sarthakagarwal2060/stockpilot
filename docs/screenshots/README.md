@@ -12,7 +12,7 @@ Save the screenshots the grading rubric asks for in this folder:
 | `06-trivy.png` | M6 | The "Trivy scan" step log in that run |
 | `07-ghcr.png` | M5 | GitHub → Packages → stockpilot-backend / -frontend with SHA tags |
 | `08-terraform-plan.png` | M7 | `terraform plan` |
-| `09-aws-vpc-eks.png` | M7 | AWS Console → VPC and EKS in ap-south-1 |
+| `09-aws-vpc-eks.png` | M7 | AWS Console → VPC and EKS in ap-southeast-2 |
 | `10-kubectl-pods-svc.png` | M8 | `kubectl get pods,svc -n stockpilot` |
 | `11-helm-list.png` | M8 | `helm list -n stockpilot` |
 | `12-ingress-browser.png` | M8 | App opened via the load balancer hostname |

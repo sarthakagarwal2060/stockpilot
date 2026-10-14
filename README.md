@@ -13,7 +13,7 @@ The DevOps capstone wraps this app in a full delivery pipeline: tests, container
                                      ├─ push ──▶ ghcr.io/<you>/stockpilot-{backend,frontend}:<sha>
                                      └─ helm upgrade --install ──┐
                                                                  ▼
- Terraform ──▶ AWS ap-south-1: VPC (2 public + 2 private subnets, NAT) ──▶ EKS + managed node group
+ Terraform ──▶ AWS ap-southeast-2: VPC (2 public + 2 private subnets, NAT) ──▶ EKS + managed node group
                                                                  │
              ingress-nginx (NLB) ──/──────▶ frontend  (React + nginx, 2 pods)
                                  └─/api──▶ backend   (FastAPI, 2-6 pods, HPA) ──▶ PostgreSQL (StatefulSet + gp3 EBS)
@@ -152,7 +152,7 @@ kubectl get nodes
 ```
 
 This creates:
-- a VPC in `ap-south-1` across 2 AZs, with 2 public subnets (for load balancers), 2 private subnets (for nodes) and 1 NAT gateway
+- a VPC in `ap-southeast-2` across 2 AZs, with 2 public subnets (for load balancers), 2 private subnets (for nodes) and 1 NAT gateway
 - an EKS cluster with a managed node group of 2× `t3.medium` (AL2023)
 - the add-ons `vpc-cni`, `coredns`, `kube-proxy`, `eks-pod-identity-agent`, `aws-ebs-csi-driver` (IAM through Pod Identity, no static keys) and `metrics-server` (needed by the HPA)
 
