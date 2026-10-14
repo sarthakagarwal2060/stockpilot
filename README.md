@@ -137,6 +137,8 @@ The pipeline only fails on **HIGH or CRITICAL** CVEs that have a fix available (
 
 ## 4. AWS infrastructure (Terraform)
 
+> **Doing this on a new AWS account's free credits?** Follow [`docs/aws-free-run.md`](docs/aws-free-run.md). `scripts/aws-session.sh` wraps the whole session (up → screenshots → down → leftover check).
+
 Requirements: the AWS CLI configured (`aws configure` or SSO), Terraform 1.7 or later, kubectl and Helm.
 
 ```bash
