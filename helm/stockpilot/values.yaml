@@ -1,0 +1,61 @@
+# Default values for the StockPilot chart.
+
+imagePullSecrets: []   # e.g. [{name: ghcr-pull}] if your GHCR packages are private
+
+backend:
+  image:
+    repository: ghcr.io/YOUR_GITHUB_USER/stockpilot-backend
+    tag: latest          # CI overrides this with the commit SHA
+    pullPolicy: IfNotPresent
+  replicaCount: 2
+  port: 8000
+  resources:
+    requests: {cpu: 100m, memory: 192Mi}
+    limits: {cpu: 500m, memory: 384Mi}
+  hpa:
+    enabled: true
+    minReplicas: 2
+    maxReplicas: 6
+    targetCPUUtilizationPercentage: 60
+
+frontend:
+  image:
+    repository: ghcr.io/YOUR_GITHUB_USER/stockpilot-frontend
+    tag: latest
+    pullPolicy: IfNotPresent
+  replicaCount: 2
+  resources:
+    requests: {cpu: 25m, memory: 32Mi}
+    limits: {cpu: 200m, memory: 128Mi}
+
+postgres:
+  # Set enabled=false and fill externalHost to use a managed database such as Amazon RDS.
+  enabled: true
+  image: postgres:16-alpine
+  externalHost: ""
+  database: stockpilot
+  username: stockpilot
+  # Leave empty to auto-generate a random password on first install (kept across upgrades).
+  password: ""
+  storage:
+    size: 5Gi
+    storageClass: ""     # "" = cluster default
+  resources:
+    requests: {cpu: 100m, memory: 256Mi}
+    limits: {cpu: 500m, memory: 512Mi}
+
+ingress:
+  enabled: false
+  className: nginx
+  host: ""               # empty = match any host (e.g. the raw AWS load balancer hostname)
+  annotations: {}
+  tls: []
+
+monitoring:
+  serviceMonitor:
+    enabled: true
+    interval: 15s
+    labels:
+      release: kube-prometheus-stack
+  grafanaDashboard:
+    enabled: true

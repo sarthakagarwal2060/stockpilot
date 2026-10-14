@@ -1,0 +1,16 @@
+StockPilot {{ .Chart.AppVersion }} deployed as release "{{ .Release.Name }}" in namespace "{{ .Release.Namespace }}".
+
+  kubectl get pods,svc,ingress,hpa -n {{ .Release.Namespace }}
+
+{{- if .Values.ingress.enabled }}
+{{- if .Values.ingress.host }}
+Open: http://{{ .Values.ingress.host }}/
+{{- else }}
+Open the ingress-nginx load balancer hostname:
+  kubectl get svc -n ingress-nginx ingress-nginx-controller -o jsonpath='{.status.loadBalancer.ingress[0].hostname}'
+{{- end }}
+{{- else }}
+Port-forward the frontend:
+  kubectl port-forward -n {{ .Release.Namespace }} svc/{{ include "stockpilot.frontendName" . }} 3000:80
+  open http://localhost:3000
+{{- end }}

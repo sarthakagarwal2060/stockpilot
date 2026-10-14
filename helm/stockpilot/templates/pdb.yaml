@@ -1,0 +1,14 @@
+{{- range $component := list "backend" "frontend" }}
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: {{ include "stockpilot.fullname" $ }}-{{ $component }}
+  labels:
+    {{- include "stockpilot.labels" $ | nindent 4 }}
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      {{- include "stockpilot.selectorLabels" (list $ $component) | nindent 6 }}
+{{- end }}
