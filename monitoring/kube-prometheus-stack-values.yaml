@@ -1,0 +1,32 @@
+# helm install kube-prometheus-stack prometheus-community/kube-prometheus-stack \
+#   -n monitoring --create-namespace -f monitoring/kube-prometheus-stack-values.yaml
+
+prometheus:
+  prometheusSpec:
+    # Discover ServiceMonitors in every namespace, not only those labelled for this Helm release.
+    serviceMonitorSelectorNilUsesHelmValues: false
+    serviceMonitorNamespaceSelector: {}
+    podMonitorSelectorNilUsesHelmValues: false
+    retention: 3d
+    resources:
+      requests: {cpu: 200m, memory: 512Mi}
+
+grafana:
+  enabled: true
+  adminPassword: ""   # empty -> random; read it with the command in README.md
+  sidecar:
+    dashboards:
+      enabled: true
+      label: grafana_dashboard
+      searchNamespace: ALL   # loads the StockPilot dashboard ConfigMap from the app namespace
+  service:
+    type: ClusterIP          # access with kubectl port-forward
+
+alertmanager:
+  enabled: false             # not needed for the demo; saves resources
+
+# EKS manages these control-plane components; their scrape targets would show as DOWN.
+kubeControllerManager: {enabled: false}
+kubeScheduler: {enabled: false}
+kubeEtcd: {enabled: false}
+kubeProxy: {enabled: false}
