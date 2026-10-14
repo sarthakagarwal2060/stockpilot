@@ -31,3 +31,7 @@ crash.log
 .vscode/
 .DS_Store
 *.log
+
+# Terraform plan files (contain account details)
+tfplan
+*.tfplan
