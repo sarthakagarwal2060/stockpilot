@@ -1,5 +1,5 @@
 # StockPilot: Inventory Management on AWS EKS
-
+<!-- fjdsfjdsljfdlfj -->
 StockPilot is a small inventory management app for a warehouse team. It tracks products (SKU, supplier, location, unit price), how much stock is on hand, and when each item needs reordering. Every stock change (restock, sale, return, damage, correction) is recorded as an audited **stock movement**. The dashboard shows inventory value, low-stock and out-of-stock counts, a "reorder soon" list and a live movement feed.
 
 The DevOps capstone wraps this app in a full delivery pipeline: tests, container images, a security scan, a registry, Terraform-built AWS infrastructure, Helm on Kubernetes, Ingress, autoscaling and monitoring.
